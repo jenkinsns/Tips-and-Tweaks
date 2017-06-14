@@ -1,0 +1,18 @@
+
+    var caml = "<View><Query><Where><Or><IsNull><FieldRef Name='CAPID' /></IsNull><Eq><FieldRef Name='CAPID' /><Value Type='Text'></Value></Eq></Or></Where></Query></View>";
+		var siteUrl = _spPageContextInfo.siteAbsoluteUrl
+		var data = { "query" : {"__metadata": { "type": "SP.CamlQuery" }, "ViewXml":caml}};
+		 $.ajax({
+                url: siteUrl+"/_api/web/lists/GetByTitle('ResolveitORACAP')/GetItems",
+                method: "POST",
+                data: JSON.stringify(data),
+                headers: {"X-RequestDigest": $("#__REQUESTDIGEST").val(),'content-type': 'application/json;odata=verbose','accept': 'application/json;odata=verbose'},
+                success: function (res)
+                {
+                    var dataToInsert = res.d.results
+					loadViews(dataToInsert);
+                },
+                error: function (data) {
+                  console.log('caml error')
+                }
+            });
